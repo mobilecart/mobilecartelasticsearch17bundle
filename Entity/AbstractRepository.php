@@ -109,8 +109,24 @@ class AbstractRepository
      */
     public function createDocument($entity)
     {
-        if (in_array($this->getObjectType(), [
-            EntityConstants::ITEM_VAR,
+        if ($this->getObjectType() == EntityConstants::ITEM_VAR) {
+
+            $docData = $entity->getBaseData();
+            $objectTypes = [];
+
+            $varSetVars = $entity->getItemVarSetVars();
+            if ($varSetVars) {
+                foreach($varSetVars as $varSetVar) {
+                    $objectType = $varSetVar->getItemVarSet()->getObjectType();
+                    if (!in_array($objectType, $objectTypes)) {
+                        $objectTypes[] = $objectType;
+                    }
+                }
+                $docData['object_type'] = $objectTypes;
+            }
+
+            return new Document($entity->getId(), $docData);
+        } elseif (in_array($this->getObjectType(), [
             EntityConstants::ITEM_VAR_SET,
             EntityConstants::ITEM_VAR_SET_VAR,
             EntityConstants::ITEM_VAR_OPTION,
@@ -154,6 +170,7 @@ class AbstractRepository
                 ) {
 
                     switch($var->getFormInput()) {
+                        case 'text':
                         case 'select':
                             $docData[$facetKey] = $varValue->getValue();
                             break;
@@ -178,6 +195,7 @@ class AbstractRepository
                 ) {
 
                     switch($varValue->getItemVar()->getFormInput()) {
+                        case 'text':
                         case 'select':
                             $docData[$searchKey] = $varValue->getValue();
                             break;

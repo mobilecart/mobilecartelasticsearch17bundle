@@ -190,7 +190,6 @@ class ElasticSearchEntityService
      */
     public function getObjectTypeItemVars($objectType)
     {
-        // todo : handle this better
         return $this->getRepository(EntityConstants::ITEM_VAR)->findBy([
             'object_type' => $objectType,
         ]);

@@ -4,6 +4,7 @@ namespace MobileCart\ElasticSearch17Bundle\Service;
 
 use Elastica\ResultSet;
 use Elastica\Query;
+use MobileCart\CoreBundle\Constants\EntityConstants;
 use MobileCart\CoreBundle\Service\AbstractSearchService;
 
 class ElasticSearchSearchService extends AbstractSearchService
@@ -92,7 +93,8 @@ class ElasticSearchSearchService extends AbstractSearchService
             $this->populateFacetLinks();
             return $this->facetCounts;
         }
-        return array();
+
+        return [];
     }
 
     /**
@@ -102,6 +104,21 @@ class ElasticSearchSearchService extends AbstractSearchService
     {
         if ($this->getExecutedFacetCounts()) {
             return $this->facetCounts;
+        }
+
+        // load facets
+
+        $this->vars = $this->getEntityService()
+            ->getRepository(EntityConstants::ITEM_VAR)->findBy([
+                'is_facet' => 1
+            ]);
+
+        $facets = [];
+        if ($this->vars) {
+            foreach($this->vars as $itemVar) {
+                $facets[] = $itemVar->getCode();
+            }
+            $this->facets = $facets;
         }
 
         $this->getFacetCountsFromResult($this->getClient()->search([

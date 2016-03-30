@@ -114,6 +114,10 @@ class ItemVarRepository
             'form_input'   => array('type' => 'string', 'index' => 'analyzed'),
             'is_required'  => array('type' => 'boolean'),
             'is_displayed' => array('type' => 'boolean'),
+            'sort_order' => array('type' => 'integer'),
+            'is_facet'  => array('type' => 'boolean'),
+            'is_searchable' => array('type' => 'boolean'),
+            'object_type'   => array('type' => 'string', 'index' => 'analyzed'),
         );
     }
 }

@@ -29,6 +29,7 @@
     </parameters>
 
     <services>
+        <!-- ElasticSearch Client -->
         <service id="cart.es17.client" class="%cart.es17.client.class%">
             <call method="setConfigValue">
                 <argument>host</argument>
@@ -39,6 +40,7 @@
                 <argument>%cart.es17.client.port%</argument>
             </call>
         </service>
+        <!-- ElasticSearch Entity Service -->
         <service id="cart.es17.entity" class="%cart.es17.entity.class%">
             <call method="setClient">
                 <argument type="service" id="cart.es17.client" />
