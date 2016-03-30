@@ -85,7 +85,7 @@
             </call>
         </service>
         <service id="cart.es17.listener.product.delete" lazy="true" class="%cart.es17.listener.product.delete.class%">
-            <tag name="kernel.event_listener" event="product.delete" method="onProductDelete" priority="40" />
+            <tag name="kernel.event_listener" event="product.delete" method="onProductDelete" priority="60" />
             <call method="setEntityService">
                 <argument type="service" id="cart.es17.entity" />
             </call>
@@ -105,7 +105,7 @@
             </call>
         </service>
         <service id="cart.es17.listener.category.delete" lazy="true" class="%cart.es17.listener.category.delete.class%">
-            <tag name="kernel.event_listener" event="category.delete" method="onCategoryDelete" priority="40" />
+            <tag name="kernel.event_listener" event="category.delete" method="onCategoryDelete" priority="60" />
             <call method="setEntityService">
                 <argument type="service" id="cart.es17.entity" />
             </call>
@@ -125,7 +125,7 @@
             </call>
         </service>
         <service id="cart.es17.listener.content.delete" lazy="true" class="%cart.es17.listener.content.delete.class%">
-            <tag name="kernel.event_listener" event="content.delete" method="onContentDelete" priority="40" />
+            <tag name="kernel.event_listener" event="content.delete" method="onContentDelete" priority="60" />
             <call method="setEntityService">
                 <argument type="service" id="cart.es17.entity" />
             </call>
@@ -145,7 +145,7 @@
             </call>
         </service>
         <service id="cart.es17.listener.item_var.delete" lazy="true" class="%cart.es17.listener.item_var.delete.class%">
-            <tag name="kernel.event_listener" event="item_var.delete" method="onItemVarDelete" priority="40" />
+            <tag name="kernel.event_listener" event="item_var.delete" method="onItemVarDelete" priority="60" />
             <call method="setEntityService">
                 <argument type="service" id="cart.es17.entity" />
             </call>

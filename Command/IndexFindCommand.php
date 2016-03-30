@@ -2,6 +2,7 @@
 
 namespace MobileCart\ElasticSearch17Bundle\Command;
 
+use MobileCart\CoreBundle\Constants\EntityConstants;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -20,8 +21,9 @@ class IndexFindCommand extends ContainerAwareCommand
     {
         $this
             ->setName('cart:es17:find')
-            ->setDescription('Search products, categories, customers in ElasticSearch')
+            ->setDescription('Search products, categories, contents, item_vars in ElasticSearch')
             ->addArgument('id', InputArgument::REQUIRED, 'ID')
+            ->addArgument('object_type', InputArgument::OPTIONAL, 'Object Type eg product, category, content, item_var', EntityConstants::PRODUCT)
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command searches products within Elastica Search:
 
@@ -39,11 +41,11 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $elastica = $this->getContainer()->get('mobilecartelastica.entity');
+        $entityService = $this->getContainer()->get('cart.es17.entity');
 
         $id = $input->getArgument('id');
 
-        $document = $elastica->find('product', $id);
+        $document = $entityService->find($input->getArgument('object_type'), $id);
         $message = print_r($document, 1);
         $output->writeln($message);
     }
