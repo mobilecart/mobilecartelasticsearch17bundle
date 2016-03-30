@@ -1,0 +1,155 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="cart.es17.search.class">MobileCart\ElasticSearch17Bundle\Service\ElasticSearchSearchService</parameter>
+        <parameter key="cart.es17.entity.class">MobileCart\ElasticSearch17Bundle\Service\ElasticSearchEntityService</parameter>
+        <parameter key="cart.es17.client.class">MobileCart\ElasticSearch17Bundle\Service\ElasticSearchClient</parameter>
+        <parameter key="cart.es17.client.host">localhost</parameter>
+        <parameter key="cart.es17.client.port">9200</parameter>
+        <parameter key="cart.es17.repo.product">MobileCart\ElasticSearch17Bundle\Entity\ProductRepository</parameter>
+        <parameter key="cart.es17.repo.category">MobileCart\ElasticSearch17Bundle\Entity\CategoryRepository</parameter>
+        <parameter key="cart.es17.repo.content">MobileCart\ElasticSearch17Bundle\Entity\ContentRepository</parameter>
+        <parameter key="cart.es17.repo.item_var">MobileCart\ElasticSearch17Bundle\Entity\ItemVarRepository</parameter>
+        <parameter key="cart.es17.listener.product.update.class">MobileCart\ElasticSearch17Bundle\EventListener\Product\ProductUpdate</parameter>
+        <parameter key="cart.es17.listener.product.insert.class">MobileCart\ElasticSearch17Bundle\EventListener\Product\ProductInsert</parameter>
+        <parameter key="cart.es17.listener.product.delete.class">MobileCart\ElasticSearch17Bundle\EventListener\Product\ProductDelete</parameter>
+        <parameter key="cart.es17.listener.category.update.class">MobileCart\ElasticSearch17Bundle\EventListener\Category\CategoryUpdate</parameter>
+        <parameter key="cart.es17.listener.category.insert.class">MobileCart\ElasticSearch17Bundle\EventListener\Category\CategoryInsert</parameter>
+        <parameter key="cart.es17.listener.category.delete.class">MobileCart\ElasticSearch17Bundle\EventListener\Category\CategoryDelete</parameter>
+        <parameter key="cart.es17.listener.content.update.class">MobileCart\ElasticSearch17Bundle\EventListener\Content\ContentUpdate</parameter>
+        <parameter key="cart.es17.listener.content.insert.class">MobileCart\ElasticSearch17Bundle\EventListener\Content\ContentInsert</parameter>
+        <parameter key="cart.es17.listener.content.delete.class">MobileCart\ElasticSearch17Bundle\EventListener\Content\ContentDelete</parameter>
+        <parameter key="cart.es17.listener.item_var.update.class">MobileCart\ElasticSearch17Bundle\EventListener\ItemVar\ItemVarUpdate</parameter>
+        <parameter key="cart.es17.listener.item_var.insert.class">MobileCart\ElasticSearch17Bundle\EventListener\ItemVar\ItemVarInsert</parameter>
+        <parameter key="cart.es17.listener.item_var.delete.class">MobileCart\ElasticSearch17Bundle\EventListener\ItemVar\ItemVarDelete</parameter>
+    </parameters>
+
+    <services>
+        <service id="cart.es17.client" class="%cart.es17.client.class%">
+            <call method="setConfigValue">
+                <argument>host</argument>
+                <argument>%cart.es17.client.host%</argument>
+            </call>
+            <call method="setConfigValue">
+                <argument>port</argument>
+                <argument>%cart.es17.client.port%</argument>
+            </call>
+        </service>
+        <service id="cart.es17.entity" class="%cart.es17.entity.class%">
+            <call method="setClient">
+                <argument type="service" id="cart.es17.client" />
+            </call>
+            <call method="setRdbmsEntityService">
+                <argument type="service" id="cart.entity" />
+            </call>
+            <call method="addObjectRepository">
+                <argument>product</argument>
+                <argument>%cart.es17.repo.product%</argument>
+            </call>
+            <call method="addObjectRepository">
+                <argument>category</argument>
+                <argument>%cart.es17.repo.category%</argument>
+            </call>
+            <call method="addObjectRepository">
+                <argument>content</argument>
+                <argument>%cart.es17.repo.content%</argument>
+            </call>
+            <call method="addObjectRepository">
+                <argument>item_var</argument>
+                <argument>%cart.es17.repo.item_var%</argument>
+            </call>
+        </service>
+
+        <!-- Search Service -->
+        <service id="cart.es17.search" class="%cart.es17.search.class%">
+            <call method="setEntityService">
+                <argument type="service" id="cart.es17.entity" />
+            </call>
+        </service>
+
+        <!-- Product Listeners -->
+        <service id="cart.es17.listener.product.insert" class="%cart.es17.listener.product.insert.class%">
+            <tag name="kernel.event_listener" event="product.insert" method="onProductInsert" priority="40" />
+            <call method="setEntityService">
+                <argument type="service" id="cart.es17.entity" />
+            </call>
+        </service>
+        <service id="cart.es17.listener.product.update" class="%cart.es17.listener.product.update.class%">
+            <tag name="kernel.event_listener" event="product.update" method="onProductUpdate" priority="40" />
+            <call method="setEntityService">
+                <argument type="service" id="cart.es17.entity" />
+            </call>
+        </service>
+        <service id="cart.es17.listener.product.delete" lazy="true" class="%cart.es17.listener.product.delete.class%">
+            <tag name="kernel.event_listener" event="product.delete" method="onProductDelete" priority="40" />
+            <call method="setEntityService">
+                <argument type="service" id="cart.es17.entity" />
+            </call>
+        </service>
+
+        <!-- Category Listeners -->
+        <service id="cart.es17.listener.category.insert" class="%cart.es17.listener.category.insert.class%">
+            <tag name="kernel.event_listener" event="category.insert" method="onCategoryInsert" priority="40" />
+            <call method="setEntityService">
+                <argument type="service" id="cart.es17.entity" />
+            </call>
+        </service>
+        <service id="cart.es17.listener.category.update" class="%cart.es17.listener.category.update.class%">
+            <tag name="kernel.event_listener" event="category.update" method="onCategoryUpdate" priority="40" />
+            <call method="setEntityService">
+                <argument type="service" id="cart.es17.entity" />
+            </call>
+        </service>
+        <service id="cart.es17.listener.category.delete" lazy="true" class="%cart.es17.listener.category.delete.class%">
+            <tag name="kernel.event_listener" event="category.delete" method="onCategoryDelete" priority="40" />
+            <call method="setEntityService">
+                <argument type="service" id="cart.es17.entity" />
+            </call>
+        </service>
+
+        <!-- Content Listeners -->
+        <service id="cart.es17.listener.content.insert" class="%cart.es17.listener.content.insert.class%">
+            <tag name="kernel.event_listener" event="content.insert" method="onContentInsert" priority="40" />
+            <call method="setEntityService">
+                <argument type="service" id="cart.es17.entity" />
+            </call>
+        </service>
+        <service id="cart.es17.listener.content.update" class="%cart.es17.listener.content.update.class%">
+            <tag name="kernel.event_listener" event="content.update" method="onContentUpdate" priority="40" />
+            <call method="setEntityService">
+                <argument type="service" id="cart.es17.entity" />
+            </call>
+        </service>
+        <service id="cart.es17.listener.content.delete" lazy="true" class="%cart.es17.listener.content.delete.class%">
+            <tag name="kernel.event_listener" event="content.delete" method="onContentDelete" priority="40" />
+            <call method="setEntityService">
+                <argument type="service" id="cart.es17.entity" />
+            </call>
+        </service>
+
+        <!-- ItemVar Listeners -->
+        <service id="cart.es17.listener.item_var.insert" class="%cart.es17.listener.item_var.insert.class%">
+            <tag name="kernel.event_listener" event="item_var.insert" method="onItemVarInsert" priority="40" />
+            <call method="setEntityService">
+                <argument type="service" id="cart.es17.entity" />
+            </call>
+        </service>
+        <service id="cart.es17.listener.item_var.update" class="%cart.es17.listener.item_var.update.class%">
+            <tag name="kernel.event_listener" event="item_var.update" method="onItemVarUpdate" priority="40" />
+            <call method="setEntityService">
+                <argument type="service" id="cart.es17.entity" />
+            </call>
+        </service>
+        <service id="cart.es17.listener.item_var.delete" lazy="true" class="%cart.es17.listener.item_var.delete.class%">
+            <tag name="kernel.event_listener" event="item_var.delete" method="onItemVarDelete" priority="40" />
+            <call method="setEntityService">
+                <argument type="service" id="cart.es17.entity" />
+            </call>
+        </service>
+
+    </services>
+</container>
