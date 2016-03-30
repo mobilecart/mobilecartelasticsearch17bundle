@@ -153,7 +153,7 @@ class AbstractRepository
                     && $features[$varCode]['is_facet']
                 ) {
 
-                    switch($varValue->getItemVar()->getFormInput()) {
+                    switch($var->getFormInput()) {
                         case 'select':
                             $docData[$facetKey] = $varValue->getValue();
                             break;
