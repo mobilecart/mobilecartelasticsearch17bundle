@@ -8,6 +8,9 @@ use Elastica\Query;
 use Elastica\Query\QueryString;
 use Elastica\ResultSet;
 use Elastica\Facet\Terms;
+use Elastica\Exception\ExceptionInterface;
+use Elastica\Request;
+use Elastica\Response;
 use MobileCart\CoreBundle\CartComponent\ArrayWrapper;
 
 class ElasticSearchClient extends Client
@@ -331,5 +334,33 @@ class ElasticSearchClient extends Client
         $this->lastQuery = $query;
 
         return $index->search($query);
+    }
+
+    /**
+     * Over-ride base class to silently handle connection exceptions
+     *
+     * @param string $path
+     * @param string $method
+     * @param array $data
+     * @param array $query
+     * @return Response
+     */
+    public function request($path, $method = Request::GET, $data = array(), array $query = array())
+    {
+        try {
+            return parent::request($path, $method, $data, $query);
+        } catch (ExceptionInterface $e) {
+            if ($this->_logger) {
+                $this->_logger->warning('Failed to send a request to ElasticSearch', array(
+                    'exception' => $e->getMessage(),
+                    'path' => $path,
+                    'method' => $method,
+                    'data' => $data,
+                    'query' => $query
+                ));
+            }
+
+            return new Response('{"took":0,"timed_out":false,"hits":{"total":0,"max_score":0,"hits":[]}}');
+        }
     }
 }

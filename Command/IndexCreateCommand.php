@@ -36,6 +36,11 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $search = $this->getContainer()->get('cart.es17.search');
+        $host = $search->getClient()->getConfig('host');
+        $port = $search->getClient()->getConfig('port');
+        $message = "Connecting to host: {$host}:{$port}";
+        $output->writeln($message);
+
         $message = $search->getClient()->createRootIndex();
         $message = print_r($message, 1);
         $output->writeln($message);

@@ -10,6 +10,10 @@
         <parameter key="cart.es17.client.class">MobileCart\ElasticSearch17Bundle\Service\ElasticSearchClient</parameter>
         <parameter key="cart.es17.client.host">localhost</parameter>
         <parameter key="cart.es17.client.port">9200</parameter>
+        <parameter key="cart.es17.client.config" type="collection">
+            <parameter key="host">%cart.es17.client.host%</parameter>
+            <parameter key="port">%cart.es17.client.port%</parameter>
+        </parameter>
         <parameter key="cart.es17.repo.product">MobileCart\ElasticSearch17Bundle\Entity\ProductRepository</parameter>
         <parameter key="cart.es17.repo.category">MobileCart\ElasticSearch17Bundle\Entity\CategoryRepository</parameter>
         <parameter key="cart.es17.repo.content">MobileCart\ElasticSearch17Bundle\Entity\ContentRepository</parameter>
@@ -31,14 +35,7 @@
     <services>
         <!-- ElasticSearch Client -->
         <service id="cart.es17.client" class="%cart.es17.client.class%">
-            <call method="setConfigValue">
-                <argument>host</argument>
-                <argument>%cart.es17.client.host%</argument>
-            </call>
-            <call method="setConfigValue">
-                <argument>port</argument>
-                <argument>%cart.es17.client.port%</argument>
-            </call>
+            <argument>%cart.es17.client.config%</argument>
         </service>
         <!-- ElasticSearch Entity Service -->
         <service id="cart.es17.entity" class="%cart.es17.entity.class%">
