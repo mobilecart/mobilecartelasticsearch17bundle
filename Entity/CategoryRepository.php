@@ -3,7 +3,7 @@
 namespace MobileCart\ElasticSearch17Bundle\Entity;
 
 use Elastica\Document;
-use MobileCart\CoreBundle\Entity\CartRepositoryInterface;
+use MobileCart\CoreBundle\Repository\CartRepositoryInterface;
 use MobileCart\ElasticSearch17Bundle\Service\ElasticSearchClient;
 
 class CategoryRepository

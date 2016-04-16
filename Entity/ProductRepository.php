@@ -3,7 +3,7 @@
 namespace MobileCart\ElasticSearch17Bundle\Entity;
 
 use Elastica\Document;
-use MobileCart\CoreBundle\Entity\CartRepositoryInterface;
+use MobileCart\CoreBundle\Repository\CartRepositoryInterface;
 use MobileCart\CoreBundle\Entity\Product as DoctrineProduct;
 use MobileCart\ElasticSearch17Bundle\Service\ElasticSearchClient;
 
@@ -37,7 +37,6 @@ class ProductRepository
             'special_price' => 'Special Price',
             'qty' => 'Qty',
             'is_in_stock' => 'In Stock',
-            'is_on_sale' => 'On Sale',
             'is_taxable' => 'Taxable',
         ];
     }
@@ -129,36 +128,6 @@ class ProductRepository
                 ),
             ),
             array(
-                'code'  => 'is_on_sale',
-                'label' => 'On Sale',
-                'type'  => 'boolean',
-                'choices' => array(
-                    array(
-                        'value' => 0,
-                        'label' => 'No',
-                    ),
-                    array(
-                        'value' => 1,
-                        'label' => 'Yes',
-                    ),
-                ),
-            ),
-            array(
-                'code'  => 'is_new',
-                'label' => 'New',
-                'type'  => 'boolean',
-                'choices' => array(
-                    array(
-                        'value' => 0,
-                        'label' => 'No',
-                    ),
-                    array(
-                        'value' => 1,
-                        'label' => 'Yes',
-                    ),
-                ),
-            ),
-            array(
                 'code'  => 'is_enabled',
                 'label' => 'Enabled',
                 'type'  => 'boolean',
@@ -237,8 +206,6 @@ class ProductRepository
             'created_at'   => array('type' => 'date', 'include_in_all' => false),
 //            '_boost'  => array('type' => 'float', 'include_in_all' => false),
             'is_in_stock'  => array('type' => 'boolean'),
-            'is_on_sale'   => array('type' => 'boolean'),
-            'is_new'       => array('type' => 'boolean'),
             'visibility'   => array('type' => 'integer'),
             'config'       => array('type' => 'string', 'index' => 'not_analyzed'),
             'type'         => array('type' => 'integer', 'index' => 'analyzed'),
