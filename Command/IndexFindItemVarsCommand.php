@@ -42,9 +42,8 @@ EOF
     {
         $entityService = $this->getContainer()->get('cart.es17.entity');
 
-        $itemVars = $entityService->findBy(EntityConstants::ITEM_VAR, [
-            'object_type' => $input->getArgument('object_type'),
-        ]);
+        $itemVars = $entityService->getObjectTypeItemVars($input->getArgument('object_type'));
+
         $message = print_r($itemVars, 1);
         $output->writeln($message);
     }

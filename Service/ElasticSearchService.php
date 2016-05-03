@@ -7,7 +7,7 @@ use Elastica\Query;
 use MobileCart\CoreBundle\Constants\EntityConstants;
 use MobileCart\CoreBundle\Service\AbstractSearchService;
 
-class ElasticSearchSearchService extends AbstractSearchService
+class ElasticSearchService extends AbstractSearchService
 {
     /**
      * @var
@@ -71,14 +71,18 @@ class ElasticSearchSearchService extends AbstractSearchService
         if ($rs->getFacets()) {
             $facets = $rs->getFacets();
             if ($facets) {
+
+                /*
                 foreach($facets as $k => $v) {
 
-                    /*
                     if (substr($k, 0, strlen($this->getFacetPrefix())) == $this->getFacetPrefix()) {
                         $k2 = str_replace($this->getFacetPrefix(), '', $k);
                         $facets[$k2] = $v;
                         unset($facets[$k]);
-                    } //*/
+                    }
+                } //*/
+
+                foreach($facets as $k => $v) {
 
                     $terms = $facets[$k]['terms'];
                     if ($terms) {
@@ -116,7 +120,7 @@ class ElasticSearchSearchService extends AbstractSearchService
         $facets = [];
         if ($this->vars) {
             foreach($this->vars as $itemVar) {
-                $facets[] = $itemVar->getCode();
+                $facets[] = ElasticSearchClient::FACET_PREFIX . $itemVar->getCode();
             }
             $this->facets = $facets;
         }
@@ -208,7 +212,7 @@ class ElasticSearchSearchService extends AbstractSearchService
             'pages'        => ceil($rs->getTotalHits() / $this->getLimit()),
             'sortable'     => $sortable,
             'advFilters'   => $this->getAdvFilters(),
-            'facetFilters' => $this->getFacetFilters(),
+            'facetFilters' => $this->getActiveFacetUrlData(),
             'searchQuery'  => $searchQuery,
             'facetQuery'   => $facetQuery,
         ];

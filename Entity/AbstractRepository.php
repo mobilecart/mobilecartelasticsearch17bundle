@@ -30,6 +30,15 @@ class AbstractRepository
     }
 
     /**
+     * @param $str
+     * @return mixed
+     */
+    public function slugify($str)
+    {
+        return str_replace('--', '-', strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $str))));
+    }
+
+    /**
      * @return mixed
      */
     public function findAll()
@@ -88,17 +97,43 @@ class AbstractRepository
 
     /**
      * @param array $filters
+     * @param array $orderBy
+     * @param null $limit
+     * @param null $offset
      * @return mixed
      */
-    public function findBy(array $filters)
+    public function findBy(array $filters, array $orderBy = null, $limit = null, $offset = null)
     {
+        if (is_null($limit)) {
+            $limit = 15;
+        }
+
+        $page = 1;
+        if ($offset > 0) {
+            $page = ceil($offset / $limit) - 1;
+        }
+
         $params = [
             'type' => $this->getObjectType(),
             //'search' => '*',
             'filters' => $filters,
+            'page' => $page,
+            'limit' => $limit,
         ];
 
-        // todo : paginator logic, for retrieving all
+        if ($orderBy && count($orderBy) > 0) {
+
+            foreach($orderBy as $sortBy => $sortDir) {
+
+                if (!in_array($sortDir, ['asc', 'desc'])) {
+                    $sortDir = 'asc';
+                }
+
+                $params['sort_by']  = $sortBy;
+                $params['sort_dir'] = $sortDir;
+                break;
+            }
+        }
 
         return $this->getClient()->getDataFromResult($this->getClient()->search($params));
     }
@@ -148,7 +183,7 @@ class AbstractRepository
             if ($varSetVars) {
                 foreach($varSetVars as $varSetVar) {
                     $itemVar = $varSetVar->getItemVar();
-                    $features[$itemVar->getCode()] = $varSetVar->getData();
+                    $features[$itemVar->getCode()] = $itemVar->getData();
                 }
             }
             $varValues = $entity->getVarValues();
@@ -172,13 +207,19 @@ class AbstractRepository
                     switch($var->getFormInput()) {
                         case 'text':
                         case 'select':
-                            $docData[$facetKey] = $varValue->getValue();
+                            $docData[$facetKey] = $this->slugify($varValue->getValue());
                             break;
                         case 'multiselect':
 
                             $value = isset($docData[$facetKey])
                                 ? array_merge($docData[$facetKey], [$varValue->getValue()])
                                 : [$varValue->getValue()];
+
+                            if ($value) {
+                                foreach($value as $k => $v) {
+                                    $value[$k] = $this->slugify($v);
+                                }
+                            }
 
                             $docData[$facetKey] = $value;
 

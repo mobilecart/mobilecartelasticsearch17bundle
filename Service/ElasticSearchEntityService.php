@@ -192,7 +192,11 @@ class ElasticSearchEntityService
     {
         return $this->getRepository(EntityConstants::ITEM_VAR)->findBy([
             'object_type' => $objectType,
-        ]);
+        ],
+        null,
+        1000,
+        0
+        );
     }
 
     /**
