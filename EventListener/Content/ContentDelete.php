@@ -25,7 +25,12 @@ class ContentDelete
     public function onContentDelete(Event $event)
     {
         $entity = $event->getEntity();
-        $this->getEntityService()->remove($entity);
+        try {
+            $this->getEntityService()->remove($entity);
+        } catch(\Exception $e) {
+            // silence
+        }
+
     }
 
 }
