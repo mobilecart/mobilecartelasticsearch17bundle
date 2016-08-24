@@ -8,7 +8,7 @@
         <parameter key="cart.es17.search.class">MobileCart\ElasticSearch17Bundle\Service\ElasticSearchService</parameter>
         <parameter key="cart.es17.entity.class">MobileCart\ElasticSearch17Bundle\Service\ElasticSearchEntityService</parameter>
         <parameter key="cart.es17.client.class">MobileCart\ElasticSearch17Bundle\Service\ElasticSearchClient</parameter>
-        <parameter key="cart.es17.client.host">localhost</parameter>
+        <parameter key="cart.es17.client.host">127.0.0.1</parameter>
         <parameter key="cart.es17.client.port">9200</parameter>
         <parameter key="cart.es17.client.config" type="collection">
             <parameter key="host">%cart.es17.client.host%</parameter>

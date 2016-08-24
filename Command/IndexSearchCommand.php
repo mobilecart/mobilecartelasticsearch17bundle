@@ -20,10 +20,11 @@ class IndexSearchCommand extends ContainerAwareCommand
     {
         $this
             ->setName('cart:es17:search')
-            ->setDescription('Search products, categories, customers in ElasticSearch')
+            ->setDescription('Search object type in ElasticSearch')
+            ->addArgument('object_type', InputArgument::REQUIRED, 'Object Type eg product, content')
             ->addArgument('search', InputArgument::OPTIONAL, 'Search terms; use quotes', 'match_all')
             ->setHelp(<<<EOF
-The <info>%command.name%</info> command searches products within Elastica Search:
+The <info>%command.name%</info> command searches objects within ElasticSearch:
 
 <info>php %command.full_name%</info>
 
@@ -40,10 +41,10 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $search = $this->getContainer()->get('cart.es17.search');
-
+        $objectType = $input->getArgument('object_type');
         $query = $input->getArgument('search');
         $params = [
-            'type'  => EntityConstants::PRODUCT,
+            'type'  => $objectType,
             'search' => $query,
         ];
 
