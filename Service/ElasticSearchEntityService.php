@@ -185,6 +185,20 @@ class ElasticSearchEntityService
     }
 
     /**
+     * Stub function to prevent bugs when switching between Entity Services
+     *
+     * @param $objectType
+     * @param $entity
+     * @param array $data
+     * @return $this
+     */
+    public function persistVariants($objectType, $entity, array $data)
+    {
+        // nothing to do since NoSQL doesnt need EAV
+        return $this;
+    }
+
+    /**
      * @param $objectType
      * @return array
      */
