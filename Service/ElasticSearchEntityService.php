@@ -162,7 +162,7 @@ class ElasticSearchEntityService
     public function remove($entity, $objectType = '')
     {
         $index = $this->getClient()->getIndex($this->getClient()->getRootIndex());
-        $type = $index->getType($entity->getObjectTypeName());
+        $type = $index->getType($entity->getObjectTypeKey());
         $type->deleteById($entity->getId());
         $index->refresh();
         return $this;
@@ -178,7 +178,7 @@ class ElasticSearchEntityService
     public function persist($entity, $objectType = '')
     {
         if (!$objectType) {
-            $objectType = $entity->getObjectTypeName();
+            $objectType = $entity->getObjectTypeKey();
         }
 
         return $this->getRepository($objectType)->persistEntity($entity);
