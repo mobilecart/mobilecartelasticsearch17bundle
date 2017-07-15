@@ -40,16 +40,11 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $search = $this->getContainer()->get('cart.es17.search');
-        $objectType = $input->getArgument('object_type');
-        $query = $input->getArgument('search');
-        $params = [
-            'type'  => $objectType,
-            'search' => $query,
-        ];
+        $resultSet = $this->getContainer()->get('cart.es17.search')
+            ->setObjectType($input->getArgument('object_type'))
+            ->setQuery($input->getArgument('search'))
+            ->search();
 
-        $resultSet = $search->search($params);
-        $message = print_r($resultSet, 1);
-        $output->writeln($message);
+        $output->writeln(print_r($resultSet, 1));
     }
 }
