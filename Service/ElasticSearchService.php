@@ -13,7 +13,7 @@ class ElasticSearchService
     implements SearchServiceInterface
 {
     /**
-     * @var
+     * @var ElasticSearchEntityService
      */
     protected $entityService;
 
@@ -23,17 +23,17 @@ class ElasticSearchService
     private $debugQuery;
 
     /**
-     * @param $entityService
+     * @param ElasticSearchEntityService $entityService
      * @return $this
      */
-    public function setEntityService($entityService)
+    public function setEntityService(ElasticSearchEntityService $entityService)
     {
         $this->entityService = $entityService;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return ElasticSearchEntityService
      */
     public function getEntityService()
     {
@@ -41,7 +41,7 @@ class ElasticSearchService
     }
 
     /**
-     * @return mixed
+     * @return ElasticSearchClient
      */
     public function getClient()
     {
