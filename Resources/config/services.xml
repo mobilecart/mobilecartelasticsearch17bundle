@@ -33,6 +33,14 @@
     </parameters>
 
     <services>
+
+        <!-- Over-ride frontend Search Service -->
+        <service id="cart.search.frontend" lazy="true" class="%cart.es17.search.class%">
+            <call method="setEntityService">
+                <argument type="service" id="cart.es17.entity" />
+            </call>
+        </service>
+
         <!-- ElasticSearch Client -->
         <service id="cart.es17.client" class="%cart.es17.client.class%">
             <argument>%cart.es17.client.config%</argument>

@@ -19,6 +19,14 @@ class CategoryRepository
     }
 
     /**
+     * @return bool
+     */
+    public function hasImages()
+    {
+        return true;
+    }
+
+    /**
      * @return array
      */
     public function getSortableFields()

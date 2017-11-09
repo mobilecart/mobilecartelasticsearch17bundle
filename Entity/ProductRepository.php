@@ -20,6 +20,14 @@ class ProductRepository
     }
 
     /**
+     * @return bool
+     */
+    public function hasImages()
+    {
+        return true;
+    }
+
+    /**
      * @return array
      */
     public function getSortableFields()
@@ -190,7 +198,7 @@ class ProductRepository
      */
     public function getProperties()
     {
-        return array(
+        return [
             'id'           => array('type' => 'integer', 'include_in_all' => false),
             'sku'          => array('type' => 'string', 'include_in_all' => false),
             'name'         => array('type' => 'string', 'index' => 'analyzed'),
@@ -209,7 +217,7 @@ class ProductRepository
             'visibility'   => array('type' => 'integer'),
             'config'       => array('type' => 'string', 'index' => 'not_analyzed'),
             'type'         => array('type' => 'integer', 'index' => 'analyzed'),
-        );
+        ];
     }
 
     /**
@@ -223,6 +231,11 @@ class ProductRepository
         $docData['category_ids'] = $entity->getCategoryIds();
         $entity->reconfigure();
         $docData['config'] = $entity->getConfig();
+        $createdAt = $entity->getCreatedAt();
+        if ($createdAt instanceof \DateTime) {
+            $createdAt = $createdAt->format(\DateTime::ISO8601);
+            $docData['created_at'] = $createdAt;
+        }
         return new Document($entity->getId(), $docData);
     }
 }

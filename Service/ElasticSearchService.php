@@ -6,8 +6,11 @@ use Elastica\ResultSet;
 use Elastica\Query;
 use MobileCart\CoreBundle\Constants\EntityConstants;
 use MobileCart\CoreBundle\Service\AbstractSearchService;
+use MobileCart\CoreBundle\Service\SearchServiceInterface;
 
-class ElasticSearchService extends AbstractSearchService
+class ElasticSearchService
+    extends AbstractSearchService
+    implements SearchServiceInterface
 {
     /**
      * @var
